@@ -25,18 +25,19 @@ app.get('/talker', (req, res) => {
 });
 
 app.get('/talker/:id', (req, res) => {
-  try {
     const { id } = req.params;
     const talker = services.findTalkerById(Number(id));
-    if (!talker) throw new Error('Não foi possível acessar a lista de palestrantes.');
 
-    if (talker.length < 1) { 
+    if (!talker) { 
       return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
     }
     res.status(200).send(talker);
-  } catch (error) {
-    console.log(error.message);
-  }
+});
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  const response = { token: services.genToken(email, password) };
+  res.status(200).send(response);
 });
 
 app.listen(PORT, () => {
