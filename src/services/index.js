@@ -8,7 +8,7 @@ const read = () => {
 
 const findTalkerById = (id) => {
     const data = read();
-    const talker = data.find((currTalk) => currTalk.id === id);
+    const talker = data.filter((currTalk) => currTalk.id === id);
     return talker;
 };
 
