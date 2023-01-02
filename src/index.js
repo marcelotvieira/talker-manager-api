@@ -1,5 +1,6 @@
 const express = require('express');
 const services = require('./services');
+const { validateEmail, validatePassword } = require('./middlewares');
 
 const app = express();
 app.use(express.json());
@@ -34,7 +35,7 @@ app.get('/talker/:id', (req, res) => {
     res.status(200).send(talker);
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', validateEmail, validatePassword, (req, res) => {
   const { email, password } = req.body;
   const response = { token: services.genToken(email, password) };
   res.status(200).send(response);
