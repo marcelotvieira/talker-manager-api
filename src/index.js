@@ -27,12 +27,11 @@ app.get('/talker', (req, res) => {
   try {
     const data = services.read();
     if (!data) throw new Error('Não foi possível ler a lista de palestrantes');
-    if (data.length < 1) res.status(200).send([]);
-    res.status(200).send(data);
+    if (data.length < 1) return res.status(200).send([]);
+    return res.status(200).json(data);
   } catch (error) {
-    res.status(400).send(error.message);
+    console.log(error.message);
   }
-  res.status(200).json();
 });
 
 app.post(

@@ -14,12 +14,12 @@ const passwordError = {
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
   if (!email || email === '') {
-    res.status(400).send(emptyEmailError);
+    return res.status(400).send(emptyEmailError);
   }
   const exp = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
   const isValid = exp.test(email);
   if (!isValid) {
-    res.status(400).send(emailError);
+    return res.status(400).send(emailError);
   }
   next();
 };
@@ -28,10 +28,10 @@ const validatePassword = (req, res, next) => {
   const { password } = req.body;
   const isValid = !password || password.length > 5;
   if (!password) {
-    res.status(400).send(emptyPasswordError);
+    return res.status(400).send(emptyPasswordError);
   }
   if (!isValid) {
-    res.status(400).send(passwordError);
+    return res.status(400).send(passwordError);
   }
   next();
 };
@@ -40,13 +40,13 @@ const checkToken = (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Token não encontrado',
       });
     }
     next();
   } catch (error) {
-    res.status(400).json({
+      return res.status(400).json({
       message: error.message,
     });
   }
@@ -56,13 +56,13 @@ const validateToken = (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (typeof authorization !== 'string' || authorization.length !== 16) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Token inválido',
       });
     }
     next();
   } catch (err) {
-    res.status(400).json({
+      return res.status(400).json({
       message: err.message,
     });
   }
@@ -72,12 +72,12 @@ const checkRequestNameData = (req, res, next) => {
   try {
     const { name } = req.body;
     if (!name || name === '') {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O campo "name" é obrigatório',
       });
     }
     if (name.length <= 3) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O "name" deve ter pelo menos 3 caracteres',
       });
     }
@@ -93,12 +93,12 @@ const checkRequestAgeData = (req, res, next) => {
   try {
     const { age } = req.body;
     if (!age || age === '') {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O campo "age" é obrigatório',
       });
     }
     if (age < 18) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'A pessoa palestrante deve ser maior de idade',
       });
     }
@@ -114,13 +114,13 @@ const checkRequestTalkData = (req, res, next) => {
   try {
     const { talk } = req.body;
     if (!talk || talk.length < 1) {
-      res.status(400).json({
+      return res.status(400).json({
       message: 'O campo "talk" é obrigatório',
     });
     }
     next();
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: error.message,
     });
   }
