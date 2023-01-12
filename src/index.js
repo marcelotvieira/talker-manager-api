@@ -72,8 +72,8 @@ checkRequestRateData,
 checkRequestRateType,
 (req, res) => {
   try {
-    const data = services.read();
-    const newTalker = { id: data.length, ...req.body };
+    const { id } = req.params;
+    const newTalker = { id: Number(id), ...req.body };
     services.update(newTalker);
     res.status(200).json(newTalker);
   } catch (err) {

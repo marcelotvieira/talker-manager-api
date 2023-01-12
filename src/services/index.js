@@ -19,7 +19,9 @@ const write = (talker) => {
 const update = (talker) => {
     const data = read();
     const filteredData = data.filter((t) => talker.id !== t.id);
+    if (data.length === filteredData.length) return;
     const newData = [...filteredData, talker];
+    console.log(newData);
     fs.writeFile('src/talker.json', JSON.stringify(newData), (error) => {
         if (error) return console.log(error);
     });
