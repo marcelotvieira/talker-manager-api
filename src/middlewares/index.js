@@ -127,73 +127,31 @@ const checkRequestTalkData = (req, res, next) => {
 };
 
 const checkRequestWatchedAtData = (req, res, next) => {
-  try {
-    const { talk: { watchedAt } } = req.body;
-    if (!watchedAt || watchedAt === '') {
-      res.status(400).json({
-        message: 'O campo "watchedAt" é obrigatório',
-      });
-    }
-    next();
-  } catch (err) {
-    res.status(400).json({
-      message: err.message,
-    });
+  const { talk: { watchedAt } } = req.body;
+  const expPattern = /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/;
+  if (!watchedAt) {
+      return res.status(400).json({ message: 'O campo "watchedAt" é obrigatório' });
   }
-};
-
-const checkDateType = (req, res, next) => {
-  try {
-    const { talk: { watchedAt } } = req.body;
-    const expPattern = /^[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}$/g;
-    if (!(expPattern.test(watchedAt))) {
-      res.status(400).json({
-        message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
-      });
-    }
-    next();
-  } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+  if (!expPattern.test(watchedAt)) {
+      return res.status(400).json({ 
+          message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
+  next();
 };
 
 const checkRequestRateData = (req, res, next) => {
-  try {
-    const { talk: { rate } } = req.body;
-    if (!rate) {
-      if (rate === 0) {
-        return res.status(400).json({
-        message: 'O campo "rate" deve ser um inteiro de 1 à 5',
-      }); 
-}
+  const { talk: { rate } } = req.body;
+  if (rate === undefined) {
       return res.status(400).json({
-        message: 'O campo "rate" é obrigatório',
+          message: 'O campo "rate" é obrigatório',
       });
-    }
-    next();
-  } catch (err) {
-    res.status(400).json({
-      message: err.message,
-    });
   }
-};
-
-const checkRequestRateType = (req, res, next) => {
-  try {
-    const { talk: { rate } } = req.body;
-    if (!Number.isInteger(rate) || rate < 1 || rate > 5) {
-      res.status(400).json({
-        message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+  if (rate < 1 || rate > 5 || !Number.isInteger(rate)) {
+      return res.status(400).json({
+          message: 'O campo "rate" deve ser um inteiro de 1 à 5',
       });
-    }
-    next();
-  } catch (err) {
-    res.status(400).json({
-      message: err.message,
-    });
   }
+  next();
 };
 
 module.exports = {
@@ -205,7 +163,5 @@ module.exports = {
   checkRequestAgeData,
   checkRequestTalkData,
   checkRequestWatchedAtData,
-  checkDateType,
   checkRequestRateData,
-  checkRequestRateType,
 };

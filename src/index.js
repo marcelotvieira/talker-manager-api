@@ -45,9 +45,7 @@ app.post(
    checkRequestAgeData,
    checkRequestTalkData,
    checkRequestWatchedAtData,
-   checkDateType,
    checkRequestRateData,
-   checkRequestRateType,
       (req, res) => {
   try {
     const data = services.read();
@@ -67,9 +65,7 @@ checkRequestNameData,
 checkRequestAgeData,
 checkRequestTalkData,
 checkRequestWatchedAtData,
-checkDateType,
 checkRequestRateData,
-checkRequestRateType,
 (req, res) => {
   try {
     const { id } = req.params;

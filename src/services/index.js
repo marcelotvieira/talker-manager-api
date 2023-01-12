@@ -1,15 +1,22 @@
 const fs = require('fs');
+const path = require('path');
+
+const TALKER_DATA_PATH = '../talker.json';
 
 // fazer uso de caminhos absolutos
 const read = () => {
-    const data = JSON.parse(fs.readFileSync('src/talker.json'));
-    return data;
+    try {
+        const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, TALKER_DATA_PATH)));
+        return data;
+    } catch (err) {
+        return err.message;
+    }
 };
 
 const write = (talker) => {
     const data = read();
     const newData = [...data, talker];
-    fs.writeFile('src/talker.json', JSON.stringify(newData), (err) => {
+    fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(newData), (err) => {
         if (err) {
           return console.log(err);
         }
@@ -18,11 +25,11 @@ const write = (talker) => {
 
 const update = (talker) => {
     const data = read();
-    const filteredData = data.filter((t) => talker.id !== t.id);
+    const filteredData = data.filter((t) => talker.id === t.id);
     if (data.length === filteredData.length) return;
     const newData = [...filteredData, talker];
     console.log(newData);
-    fs.writeFile('src/talker.json', JSON.stringify(newData), (error) => {
+    fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(newData), (error) => {
         if (error) return console.log(error);
     });
 };
