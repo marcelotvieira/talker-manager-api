@@ -25,9 +25,9 @@ const write = (talker) => {
 
 const update = (talker) => {
     const data = read();
-    const filteredData = data.filter((t) => talker.id === t.id);
-    if (data.length === filteredData.length) return;
-    const newData = [...filteredData, talker];
+    // const filteredData = data.filter((t) => talker.id !== t.id);
+    // if (data.length === filteredData.length) return;
+    const newData = [...data, talker];
     console.log(newData);
     fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(newData), (error) => {
         if (error) return console.log(error);
