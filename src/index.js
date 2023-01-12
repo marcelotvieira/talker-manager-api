@@ -9,9 +9,7 @@ const {
   checkRequestAgeData,
   checkRequestTalkData,
   checkRequestWatchedAtData,
-  checkDateType,
   checkRequestRateData,
-  checkRequestRateType,
 } = require('./middlewares');
 
 const app = express();
