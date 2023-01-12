@@ -6,6 +6,16 @@ const read = () => {
     return data;
 };
 
+const write = (talker) => {
+    const data = read();
+    const newData = [...data, talker];
+    fs.writeFile('src/talker.json', JSON.stringify(newData), (err) => {
+        if (err) {
+          return console.log(err);
+        }
+    });
+};
+
 const findTalkerById = (id) => {
     const data = read();
     const talker = data.find((currTalk) => currTalk.id === id);
@@ -26,4 +36,5 @@ module.exports = {
     read,
     findTalkerById,
     genToken,
+    write,
 };

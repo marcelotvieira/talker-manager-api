@@ -1,6 +1,18 @@
 const express = require('express');
 const services = require('./services');
-const { validateEmail, validatePassword } = require('./middlewares');
+const {
+  validateEmail,
+  validatePassword,
+  checkToken,
+  validateToken,
+  checkRequestNameData,
+  checkRequestAgeData,
+  checkRequestTalkData,
+  checkRequestWatchedAtData,
+  checkDateType,
+  checkRequestRateData,
+  checkRequestRateType,
+} = require('./middlewares');
 
 const app = express();
 app.use(express.json());
@@ -17,7 +29,7 @@ app.get('/talker', (req, res) => {
   try {
     const data = services.read();
     if (!data) throw new Error('Não foi possível ler a lista de palestrantes');
-    if (data.length < 1) res.status(200).send([]);
+    if (data.length < 1) res.status(404).send([]);
     res.status(200).send(data);
   } catch (error) {
     res.status(400).send(error.message);
@@ -25,14 +37,39 @@ app.get('/talker', (req, res) => {
   res.status(200).json();
 });
 
-app.get('/talker/:id', (req, res) => {
-    const { id } = req.params;
-    const talker = services.findTalkerById(Number(id));
+app.post(
+  '/talker',
+   checkToken,
+   validateToken,
+   checkRequestNameData,
+   checkRequestAgeData,
+   checkRequestTalkData,
+   checkRequestWatchedAtData,
+   checkDateType,
+   checkRequestRateData,
+   checkRequestRateType,
+      (req, res) => {
+  try {
+    const data = services.read();
+    const newTalker = { id: data.length + 1, ...req.body };
+    services.write(newTalker);
+    res.status(201).json(newTalker);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+},
+);
 
-    if (!talker) { 
-      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
-    }
-    res.status(200).send(talker);
+app.get('/talker/:id', (req, res) => {
+  const { id } = req.params;
+  const talker = services.findTalkerById(Number(id));
+
+  if (!talker) {
+    return res
+      .status(404)
+      .json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  res.status(200).send(talker);
 });
 
 app.post('/login', validateEmail, validatePassword, (req, res) => {
