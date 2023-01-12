@@ -29,7 +29,7 @@ app.get('/talker', (req, res) => {
   try {
     const data = services.read();
     if (!data) throw new Error('Não foi possível ler a lista de palestrantes');
-    if (data.length < 1) res.status(404).send([]);
+    if (data.length < 1) res.status(200).send([]);
     res.status(200).send(data);
   } catch (error) {
     res.status(400).send(error.message);
@@ -59,6 +59,27 @@ app.post(
   }
 },
 );
+
+app.put('/talker/:id',
+checkToken,
+validateToken,
+checkRequestNameData,
+checkRequestAgeData,
+checkRequestTalkData,
+checkRequestWatchedAtData,
+checkDateType,
+checkRequestRateData,
+checkRequestRateType,
+(req, res) => {
+  try {
+    const data = services.read();
+    const newTalker = { id: data.length, ...req.body };
+    services.update(newTalker);
+    res.status(200).json(newTalker);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
 
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;

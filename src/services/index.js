@@ -16,6 +16,17 @@ const write = (talker) => {
     });
 };
 
+const update = (talker) => {
+    const data = read();
+    const filteredData = data.filter((t) => talker.id !== t.id);
+    const newData = [...filteredData, talker];
+    fs.writeFile('src/talker.json', JSON.stringify(newData), (err) => {
+        if (err) {
+          return console.log(err);
+        }
+    });
+};
+
 const findTalkerById = (id) => {
     const data = read();
     const talker = data.find((currTalk) => currTalk.id === id);
@@ -37,4 +48,5 @@ module.exports = {
     findTalkerById,
     genToken,
     write,
+    update,
 };
