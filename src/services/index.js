@@ -21,9 +21,7 @@ const update = (talker) => {
     const filteredData = data.filter((t) => talker.id !== t.id);
     const newData = [...filteredData, talker];
     fs.writeFile('src/talker.json', JSON.stringify(newData), (err) => {
-        if (err) {
-          return console.log(err);
-        }
+        if (err) return console.log(err);
     });
 };
 
