@@ -39,8 +39,6 @@ const update = (talker) => {
 const destroy = (talkerId) => {
     const data = read();
     const newData = data.filter((talker) => talker.id !== Number(talkerId));
-    console.log('asudhasiudshduih\n', talkerId);
-    console.log(newData);
     return fsWrite(newData);
 };
 
