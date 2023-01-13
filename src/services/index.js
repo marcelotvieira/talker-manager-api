@@ -4,6 +4,15 @@ const path = require('path');
 const TALKER_DATA_PATH = '../talker.json';
 
 // fazer uso de caminhos absolutos
+
+const fsWrite = (value) => {
+    fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(value), (err) => {
+        if (err) {
+          return console.log(err);
+        }
+    });
+};
+
 const read = () => {
     try {
         const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, TALKER_DATA_PATH)));
@@ -16,11 +25,7 @@ const read = () => {
 const write = (talker) => {
     const data = read();
     const newData = [...data, talker];
-    fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(newData), (err) => {
-        if (err) {
-          return console.log(err);
-        }
-    });
+    fsWrite(newData);
 };
 
 const update = (talker) => {
@@ -28,10 +33,15 @@ const update = (talker) => {
     // const filteredData = data.filter((t) => talker.id !== t.id);
     // if (data.length === filteredData.length) return;
     const newData = [...data, talker];
+    return fsWrite(newData);
+};
+
+const destroy = (talkerId) => {
+    const data = read();
+    const newData = data.filter((talker) => talker.id !== Number(talkerId));
+    console.log('asudhasiudshduih\n', talkerId);
     console.log(newData);
-    fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), JSON.stringify(newData), (error) => {
-        if (error) return console.log(error);
-    });
+    return fsWrite(newData);
 };
 
 const findTalkerById = (id) => {
@@ -56,4 +66,5 @@ module.exports = {
     genToken,
     write,
     update,
+    destroy,
 };

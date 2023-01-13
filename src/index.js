@@ -74,6 +74,19 @@ checkRequestRateData,
   }
 });
 
+app.delete('/talker/:id', checkToken, validateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    services.destroy(id);
+    res.status(204).send();
+  } catch (err) {
+    res.status(400).json({
+      msg: err.message,
+    });
+  }
+});
+
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
   const talker = services.findTalkerById(Number(id));
